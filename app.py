@@ -11,10 +11,9 @@ def load_data():
     vitals = pd.read_csv('mock_vitals.csv')
     prescribing = pd.read_csv('mock_prescribing.csv')
     conditions = pd.read_csv('mock_conditions.csv')
-    family_history = pd.read_csv('mock_family_history.csv')
-    return patients, encounters, lab_results, vitals, prescribing, conditions, family_history
+    return patients, encounters, lab_results, vitals, prescribing, conditions
 
-patients, encounters, lab_results, vitals, prescribing, conditions, family_history = load_data()
+patients, encounters, lab_results, vitals, prescribing, conditions = load_data()
 
 st.title("Doctor's Dashboard")
 
@@ -27,31 +26,27 @@ cond = conditions[conditions['patid'] == selected_patient]
 lab = lab_results[lab_results['patid'] == selected_patient]
 vit = vitals[vitals['patid'] == selected_patient]
 pres = prescribing[prescribing['patid'] == selected_patient]
-fam_hist = family_history[family_history['patid'] == selected_patient]
 
 # Section 1: Patient Logs
 with st.expander("Patient Logs"):
-    st.write("This section displays historical records of patient encounters and diagnosed conditions.")
     st.write("### Encounters")
     st.dataframe(enc[['encounterid', 'enc_type', 'admit_date', 'discharge_date', 'drg']])
     st.write("### Conditions")
     st.dataframe(cond[['condition', 'condition_status', 'report_date']])
 
-# # Section 2: Timeline
-# with st.expander("Timeline: Schedule"):
-#     st.write("This section shows a chronological timeline of all key medical events including visits, lab results, and prescriptions.")
-#     timeline = pd.concat([
-#         enc[['admit_date']].rename(columns={'admit_date': 'date'}),
-#         lab[['result_date']].rename(columns={'result_date': 'date'}),
-#         pres[['rx_start_date']].rename(columns={'rx_start_date': 'date'})
-#     ])
-#     timeline['date'] = pd.to_datetime(timeline['date'])
-#     st.write("### Event Timeline")
-#     st.dataframe(timeline.sort_values('date'))
+# Section 2: Timeline
+with st.expander("Timeline: Schedule"):
+    timeline = pd.concat([
+        enc[['admit_date']].rename(columns={'admit_date': 'date'}),
+        lab[['result_date']].rename(columns={'result_date': 'date'}),
+        pres[['rx_start_date']].rename(columns={'rx_start_date': 'date'})
+    ])
+    timeline['date'] = pd.to_datetime(timeline['date'])
+    st.write("### Event Timeline")
+    st.dataframe(timeline.sort_values('date'))
 
 # Section 3: Discharge Instructions
 with st.expander("Discharge Instructions - Follow Up"):
-    st.write("This section lists follow-up tasks and clinical recommendations after the patient's discharge.")
     st.write("### Follow-Up Flags")
     follow_ups = []
     if any(enc['discharge_disposition'] != '01'):
@@ -68,7 +63,6 @@ with st.expander("Discharge Instructions - Follow Up"):
 
 # Section 4: Clinical Alerts
 with st.expander("Clinical Alerts"):
-    st.write("This section highlights any urgent conditions or indicators like diabetes or hypertension requiring clinician attention.")
     st.write("### Active Conditions and Risk Indicators")
     active = cond[cond['condition_status'] == 'AC']
     st.dataframe(active)
@@ -79,26 +73,14 @@ with st.expander("Clinical Alerts"):
         alerts.append("Hypertension: Monitor BP.")
     st.write("\n".join(alerts) if alerts else "No immediate clinical alerts.")
 
-
 # Section 5: Family + Patient History
 with st.expander("Family + Patient History"):
-    st.write("This section shows demographic information, previously diagnosed conditions, and detailed family medical history.")
-    
     st.write("### Demographics")
     st.dataframe(patients[patients['patid'] == selected_patient])
-    
     st.write("### Condition History")
     st.dataframe(cond)
 
-    st.write("### Family Medical History")
-    if not fam_hist.empty:
-        st.dataframe(fam_hist[['relationship', 'condition', 'age_of_onset']])
-    else:
-        st.info("No family history recorded for this patient.")
-
-
 # Section 6: History of Prescription
 with st.expander("History of Prescription"):
-    st.write("This section provides a timeline and details of medications prescribed to the patient.")
     st.write("### Medication Timeline")
     st.dataframe(pres[['rx_med_name', 'rx_start_date', 'rx_end_date', 'rx_refills']])

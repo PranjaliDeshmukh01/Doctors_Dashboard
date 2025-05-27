@@ -1,0 +1,14 @@
+patid,relationship,condition,age_of_onset
+P0003,Spouse,Diabetes,54
+P0002,Sibling,Diabetes,59
+P0003,Mother,Asthma,47
+P0004,Sibling,Cancer,43
+P0002,Spouse,Hypertension,35
+P0002,Father,Cancer,40
+P0002,Sibling,Diabetes,59
+P0003,Spouse,Diabetes,48
+P0002,Spouse,Hypertension,65
+P0005,Spouse,Diabetes,34
+P0001,Father,Hypertension,45
+P0001,Mother,Diabetes,50
+P0001,Brother,Asthma,30

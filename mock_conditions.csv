@@ -1,0 +1,11 @@
+patid,condition,condition_status,report_date,resolve_date
+P0004,Hypertension,IN,2024-10-11,2024-10-26
+P0001,Hypertension,AC,2023-03-05,2024-11-20
+P0003,COPD,AC,2023-04-20,2024-06-29
+P0001,Hypertension,AC,2024-10-11,2024-06-16
+P0005,Hypertension,AC,2023-06-08,2024-07-31
+P0003,Hypertension,RS,2024-10-22,
+P0001,COPD,RS,2024-12-07,
+P0003,Hypertension,AC,2023-04-04,
+P0004,Diabetes,RS,2024-10-20,2024-10-24
+P0001,Hypertension,AC,2024-01-21,
